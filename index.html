@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeuroCode - Генератор скриптов для игр</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6e44ff;
+            --secondary: #b892ff;
+            --accent: #0cce6b;
+            --dark: #1a1a2e;
+            --darker: #0d0d1a;
+            --light: #f0f0ff;
+            --github-dark: #0d1117;
+            --github-blue: #58a6ff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: var(--github-dark);
+            color: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background: rgba(13, 17, 23, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 20px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--primary);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--light);
+            text-decoration: none;
+        }
+        
+        .logo-icon {
+            background: var(--primary);
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+        
+        nav a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav a:hover {
+            color: var(--secondary);
+        }
+        
+        .hero {
+            padding: 160px 0 100px;
+            text-align: center;
+            background: linear-gradient(to bottom, var(--darker), var(--github-dark));
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at top right, rgba(110, 68, 255, 0.2), transparent 600px);
+            z-index: -1;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(to right, var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            line-height: 1.2;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto 30px;
+            color: var(--secondary);
+        }
+        
+        .github-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .github-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .github-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .github-btn i {
+            font-size: 1.2rem;
+        }
+        
+        .stars {
+            background: linear-gradient(to right, var(--primary), var(--accent));
+        }
+        
+        .features {
+            padding: 100px 0;
+            background: var(--github-dark);
+        }
+        
+        h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 60px;
+            color: var(--light);
+        }
+        
+        h2 span {
+            color: var(--accent);
+        }
+        
+        .engines-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .engine-card {
+            background: rgba(22, 27, 34, 0.8);
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid rgba(110, 68, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .engine-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, var(--primary), var(--accent));
+        }
+        
+        .engine-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            border-color: var(--primary);
+        }
+        
+        .engine-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: var(--github-blue);
+        }
+        
+        .engine-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--secondary);
+        }
+        
+        .benefits {
+            padding: 100px 0;
+            background: rgba(13, 17, 23, 0.9);
+        }
+        
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+        
+        .benefit-item {
+            text-align: center;
+            padding: 30px;
+            background: rgba(22, 27, 34, 0.8);
+            border-radius: 10px;
+            border: 1px solid rgba(12, 206, 107, 0.3);
+        }
+        
+        .benefit-icon {
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+        
+        .code-example {
+            padding: 100px 0;
+            background: var(--github-dark);
+        }
+        
+        .code-container {
+            background: rgba(22, 27, 34, 0.9);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .code-header {
+            background: rgba(13, 17, 23, 0.9);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .code-header span {
+            color: var(--accent);
+            font-weight: 600;
+        }
+        
+        .copy-btn {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--light);
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .copy-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        pre {
+            padding: 20px;
+            overflow-x: auto;
+            color: var(--light);
+            font-family: 'Fira Code', monospace;
+            line-height: 1.5;
+            margin: 0;
+        }
+        
+        .code-comment { color: #8b949e; }
+        .code-keyword { color: #ff7b72; }
+        .code-function { color: #d2a8ff; }
+        .code-string { color: #a5d6ff; }
+        .code-number { color: #79c0ff; }
+        
+        .cta-section {
+            padding: 100px 0;
+            text-align: center;
+            background: linear-gradient(to bottom, var(--github-dark), var(--darker));
+        }
+        
+        footer {
+            background: var(--darker);
+            padding: 50px 0 30px;
+            text-align: center;
+            border-top: 1px solid rgba(110, 68, 255, 0.3);
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .footer-links a {
+            color: var(--secondary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+        
+        .social-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: rgba(110, 68, 255, 0.2);
+            border-radius: 50%;
+            color: var(--light);
+            font-size: 1.5rem;
+            text-decoration: none;
+            transition: all 0.3s;
+            margin: 0 10px;
+        }
+        
+        .social-link:hover {
+            background: var(--primary);
+            transform: translateY(-5px);
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            nav ul {
+                gap: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero {
+                padding: 180px 0 80px;
+            }
+            
+            .github-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+        
+        .particles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .particle {
+            position: absolute;
+            background: rgba(110, 68, 255, 0.5);
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: float 15s infinite linear;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) rotate(0deg);
+            }
+            100% {
+                transform: translateY(-100vh) rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles-container" id="particles"></div>
+    
+    <header>
+        <div class="container header-content">
+            <a href="#" class="logo">
+                <div class="logo-icon">N</div>
+                NeuroCode
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="#features">Возможности</a></li>
+                    <li><a href="#code">Примеры кода</a></li>
+                    <li><a href="#benefits">Преимущества</a></li>
+                    <li><a href="#start">GitHub</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <section class="hero">
+        <div class="container">
+            <h1>NeuroCode: ТВОЙ КОД — ТВОЯ СИЛА!</h1>
+            <p>Генерируем скрипты для любой игровой вселенной! Преврати свои идеи в работающий код с помощью нашего AI-ассистента.</p>
+            
+            <div class="github-buttons">
+                <a href="#" class="github-btn stars">
+                    <i class="fas fa-star"></i> Поставить звезду
+                </a>
+                <a href="#" class="github-btn">
+                    <i class="fas fa-code-branch"></i> Форкнуть
+                </a>
+                <a href="#" class="github-btn">
+                    <i class="fas fa-download"></i> Скачать
+                </a>
+                <a href="https://t.me/Neurotextai" class="github-btn">
+                    <i class="fab fa-telegram"></i> Telegram
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <section class="features" id="features">
+        <div class="container">
+            <h2>Мы генерируем крутые скрипты для <span>популярных движков</span></h2>
+            
+            <div class="engines-grid">
+                <div class="engine-card">
+                    <div class="engine-icon"><i class="fab fa-roblox"></i></div>
+                    <h3>Roblox Studio</h3>
+                    <p>Скрипты на Lua для управления персонажем, создания лифтов, дверей, запуска катсцен, GUI-интерфейсов и любых игровых механик.</p>
+                </div>
+                
+                <div class="engine-card">
+                    <div class="engine-icon"><i class="fas fa-gamepad"></i></div>
+                    <h3>Unity (C#)</h3>
+                    <p>Скрипты передвижения, стрельбы, спавна противников или сложной логики. Получи готовый, чистый код!</p>
+                </div>
+                
+                <div class="engine-card">
+                    <div class="engine-icon"><i class="fas fa-bolt"></i></div>
+                    <h3>Unreal Engine 5</h3>
+                    <p>Код на C++ для максимальной производительности или текстовое описание нод для Blueprint. Мощь AAA-проектов!</p>
+                </div>
+                
+                <div class="engine-card">
+                    <div class="engine-icon"><i class="fas fa-puzzle-piece"></i></div>
+                    <h3>Godot (GDScript)</h3>
+                    <p>Скрипты для 2D и 3D, чтобы ты мог сосредоточиться на творчестве. Идеально для инди-разработчиков.</p>
+                </div>
+                
+                <div class="engine-card">
+                    <div class="engine-icon"><i class="fas fa-mobile-alt"></i></div>
+                    <h3>И многое другое</h3>
+                    <p>Python для утилит, JavaScript для браузерных игр, скрипты для диалоговых систем, ИИ противников и управления инвентарем.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="code-example" id="code">
+        <div class="container">
+            <h2>Примеры <span>сгенерированного кода</span></h2>
+            
+            <div class="code-container">
+                <div class="code-header">
+                    <span>movement.cs</span>
+                    <button class="copy-btn">Копировать</button>
+                </div>
+                <pre><code><span class="code-comment">// Скрипт движения персонажа для Unity</span>
+<span class="code-keyword">using</span> UnityEngine;
+
+<span class="code-keyword">public class</span> <span class="code-function">PlayerMovement</span> : MonoBehaviour
+{
+    <span class="code-keyword">public</span> <span class="code-keyword">float</span> moveSpeed = 5f;
+    <span class="code-keyword">public</span> <span class="code-keyword">float</span> jumpForce = 10f;
+    <span class="code-keyword">private</span> Rigidbody2D rb;
+    <span class="code-keyword">private</span> <span class="code-keyword">bool</span> isGrounded;
+
+    <span class="code-keyword">void</span> <span class="code-function">Start</span>()
+    {
+        rb = GetComponent&lt;Rigidbody2D&gt;();
+    }
+
+    <span class="code-keyword">void</span> <span class="code-function">Update</span>()
+    {
+        <span class="code-comment">// Движение по горизонтали</span>
+        <span class="code-keyword">float</span> moveX = Input.GetAxis(<span class="code-string">"Horizontal"</span>);
+        rb.velocity = <span class="code-keyword">new</span> Vector2(moveX * moveSpeed, rb.velocity.y);
+
+        <span class="code-comment">// Прыжок</span>
+        <span class="code-keyword">if</span> (Input.GetButtonDown(<span class="code-string">"Jump"</span>) && isGrounded)
+        {
+            rb.AddForce(<span class="code-keyword">new</span> Vector2(0f, jumpForce), ForceMode2D.Impulse);
+        }
+    }
+}</code></pre>
+            </div>
+        </div>
+    </section>
+    
+    <section class="benefits" id="benefits">
+        <div class="container">
+            <h2>Почему выбирают <span>NeuroCode</span>?</h2>
+            
+            <div class="benefits-grid">
+                <div class="benefit-item">
+                    <div class="benefit-icon"><i class="fas fa-bolt"></i></div>
+                    <h3>Экономия времени</h3>
+                    <p>Получай код в разы быстрее, чем при ручном написании.</p>
+                </div>
+                
+                <div class="benefit-item">
+                    <div class="benefit-icon"><i class="fas fa-graduation-cap"></i></div>
+                    <h3>Обучение</h3>
+                    <p>Идеально для новичков, чтобы разобраться в логике и синтаксисе.</p>
+                </div>
+                
+                <div class="benefit-item">
+                    <div class="benefit-icon"><i class="fas fa-magic"></i></div>
+                    <h3>Простота</h3>
+                    <p>Просто напиши, что должна делать твоя игра, и получи код.</p>
+                </div>
+                
+                <div class="benefit-item">
+                    <div class="benefit-icon"><i class="fas fa-robot"></i></div>
+                    <h3>Мощь AI</h3>
+                    <p>Современные нейросети, которые понимают контекст и выдают качественный результат.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="cta-section" id="start">
+        <div class="container">
+            <h2>Хватит мечтать — <span>пора творить!</span></h2>
+            <p>Посети наш GitHub репозиторий, чтобы узнать больше и начать использовать NeuroCode!</p>
+            
+            <div class="github-buttons">
+                <a href="#" class="github-btn stars">
+                    <i class="fas fa-star"></i> Поставить звезду на GitHub
+                </a>
+                <a href="#" class="github-btn">
+                    <i class="fas fa-code"></i> Посмотреть код
+                </a>
+                <a href="https://t.me/Neurotextai" class="github-btn">
+                    <i class="fab fa-telegram"></i> Наш Telegram-канал
+                </a>
+            </div>
+            
+            <p style="margin-top: 40px; color: #b892ff;">Делитесь своими творениями с хештегом #NeuroCode! Лучшие работы мы публикуем! 🌟</p>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-links">
+                <a href="#">Главная</a>
+                <a href="#features">Возможности</a>
+                <a href="#code">Примеры кода</a>
+                <a href="#benefits">Преимущества</a>
+                <a href="https://t.me/Neurotextai">Telegram</a>
+            </div>
+            
+            <div style="margin: 30px 0;">
+                <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                <a href="https://t.me/Neurotextai" class="social-link"><i class="fab fa-telegram"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-discord"></i></a>
+            </div>
+            
+            <p>© 2023 NeuroCode. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Создание частиц для фона
+        document.addEventListener('DOMContentLoaded', function() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 30;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                const size = Math.random() * 20 + 5;
+                const colors = [
+                    'rgba(110, 68, 255, 0.6)',
+                    'rgba(184, 146, 255, 0.6)',
+                    'rgba(12, 206, 107, 0.6)'
+                ];
+                
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+                particle.style.left = `${Math.random() * 100}vw`;
+                particle.style.top = `${Math.random() * 100}vh`;
+                particle.style.animationDuration = `${Math.random() * 20 + 10}s`;
+                particle.style.animationDelay = `-${Math.random() * 20}s`;
+                
+                particlesContainer.appendChild(particle);
+            }
+            
+            // Плавная прокрутка для якорных ссылок
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (this.getAttribute('href') !== '#') {
+                        document.querySelector(this.getAttribute('href')).scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // Функция копирования кода
+            document.querySelector('.copy-btn').addEventListener('click', function() {
+                const code = document.querySelector('code').innerText;
+                navigator.clipboard.writeText(code).then(() => {
+                    this.textContent = 'Скопировано!';
+                    setTimeout(() => {
+                        this.textContent = 'Копировать';
+                    }, 2000);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
